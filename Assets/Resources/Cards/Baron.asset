@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d180217a468881046a5e92cbd01a1b3d, type: 3}
+  m_Name: Baron
+  m_EditorClassIdentifier: 
+  Value: 3
+  Name: Baron
+  CardImage: {fileID: 21300000, guid: 5fbdb0ab293756f41a80394cfaa19037, type: 3}
+  Description: When this card is played, its player will choose another player and
+    privately compare hands. The player with the lower-strength hand is eliminated
+    from the round.
+  ScriptName: CompareHands
+  NumberInDeck: 2
+  Visible: 0
+  Targets: 0
