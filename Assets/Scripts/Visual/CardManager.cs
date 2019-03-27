@@ -10,13 +10,15 @@ public class CardManager : MonoBehaviour {
     public RectTransform CardBack;
 
     private bool visible;
-    [Header("text Component References")]
+    [Header("Text Component References")]
     public Text Description;
     public Text Name;
     public Text Value;
     [Header("Image References")]
     public Image CardGraphic;
     public Image Background;
+
+    public int Id;
 
 
     void Awake() {

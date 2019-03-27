@@ -14,6 +14,25 @@ public class DraggingActions : MonoBehaviour
         //transform.DOMove(savedPos, 1f); 
         //transform.DOMove(savedPos, 1f).SetEase(Ease.OutBounce, 0.5f, 0.1f);
         transform.DOMove(savedPos, 1f).SetEase(Ease.OutQuint);//, 0.5f, 0.1f);
+        RaycastHit[] hits;
+        hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 10000f);
+
+        foreach (RaycastHit objectHit in hits) {
+
+            if(objectHit.collider.gameObject.GetComponent<CardArea>() != null) {
+                Debug.Log("++++++here+++++++++++");
+            } else {
+                //return card to previous position
+                // Set old sorting order 
+                //whereIsCard.SetHandSortingOrder();
+                //whereIsCard.VisualState = tempState;
+                // Move this card back to its slot position
+                //HandVisual PlayerHand = playerOwner.PArea.handVisual;
+                //Vector3 oldCardPos = PlayerHand.slots.Children[savedHandSlot].transform.localPosition;
+                //transform.DOLocalMove(oldCardPos, 1f);
+            }
+
+        }
     }
 
     public void OnDraggingInUpdate() {

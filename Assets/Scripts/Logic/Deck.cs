@@ -16,9 +16,12 @@ public class Deck : MonoBehaviour {
 
         cardCollection = GameObject.FindObjectOfType<CardCollection>();
 
+        IDFactory.ResetIDs();
+
         foreach (var ca in cardCollection.cards) {
             for (int i = 0; i < ca.NumberInDeck; i++) {
                 CardAsset card = Object.Instantiate(ca);
+                card.Id = IDFactory.GetUniqueID();
                 cards.Add(card);
             }
         }

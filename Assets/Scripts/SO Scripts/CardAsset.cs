@@ -24,6 +24,7 @@ public class CardAsset : ScriptableObject
     public string Description;
     public string ScriptName;
     public int NumberInDeck;
+    public int Id;
     public bool Visible;
     public TargetingOptions Targets;
 

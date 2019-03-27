@@ -72,4 +72,8 @@ public class CardArea : MonoBehaviour {
 
         s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, 0));
     }
+
+    public int GetPlayerId() {
+        return player.PlayerID;
+    }
 }

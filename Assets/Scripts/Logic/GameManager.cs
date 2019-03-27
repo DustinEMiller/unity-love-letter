@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour {
@@ -53,7 +54,7 @@ public class GameManager : MonoBehaviour {
                 tokensToWin = 7;
 
                 int counter = 0;
-                while (counter <= 3) {
+                while (counter < 3) {
                     Settings.Instance.Deck.DrawACard(Settings.Instance.TwoPlayerDiscard, true);
                     counter++;
                 }
