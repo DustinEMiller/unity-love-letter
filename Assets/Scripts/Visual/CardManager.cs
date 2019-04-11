@@ -22,7 +22,6 @@ public class CardManager : MonoBehaviour {
     public int AreaIndex;
     public int SlotIndex;
 
-
     void Awake() {
         if (cardAsset != null) {
             ReadCardFromAsset();
@@ -68,6 +67,20 @@ public class CardManager : MonoBehaviour {
                 CardFront.gameObject.SetActive(false);
                 CardBack.gameObject.SetActive(true);
             }
+        }
+    }
+
+    private Transform slotParent;
+    public Transform SlotParent
+    {
+        get
+        {
+            return slotParent;
+        }
+
+        set
+        {
+            slotParent = value;
         }
     }
 
