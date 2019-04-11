@@ -9,6 +9,7 @@ public class CardArea : MonoBehaviour {
     private Player player;
     private Transform DeckTransform;
     private List<GameObject> CardsInArea = new List<GameObject>();
+    private CardManager CardManager;
 
     public SameDistanceChildrens slots;
     public AreaType areaType;
@@ -18,15 +19,16 @@ public class CardArea : MonoBehaviour {
     void Awake () {
         player = this.transform.parent.gameObject.GetComponent<Player>();
         DeckTransform = GameObject.FindObjectOfType<Deck>().transform;
+        CardManager = gameObject.GetComponent<CardManager>();
     }
 
     GameObject CreateACardAtPosition(CardAsset cardAsset, Vector3 position, Vector3 eulerAngles) {
         GameObject card;
         card = GameObject.Instantiate(Settings.Instance.CardPrefab, position, Quaternion.Euler(eulerAngles)) as GameObject;
 
-        CardManager manager = card.GetComponent<CardManager>();
-        manager.cardAsset = cardAsset;
-        manager.ReadCardFromAsset();
+       
+        CardManager.cardAsset = cardAsset;
+        CardManager.ReadCardFromAsset();
         return card;
     }
 
@@ -55,7 +57,17 @@ public class CardArea : MonoBehaviour {
         }
 
         // tween Slots GameObject to new position in 0.3 seconds
-        slots.gameObject.transform.DOLocalMoveX(posX, 0.3f);
+        //slots.gameObject.transform.DOLocalMoveX(posX, 0.3f);
+    }
+
+    // remove a card GameObject from hand
+    public void RemoveCard(GameObject card) {
+        // remove a card from the list
+        CardsInArea.Remove(card);
+
+        // re-calculate the position of the hand
+        PlaceCardsOnNewSlots();
+        UpdatePlacementOfSlots();
     }
 
     public void ReceiveACard(CardAsset cardAsset) {
@@ -70,6 +82,22 @@ public class CardArea : MonoBehaviour {
 
         Sequence s = DOTween.Sequence();
 
+        s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, 0));
+    }
+
+    public void ReceiveACard(GameObject card) {
+
+        CardManager.RemoveFromList();
+        CardsInArea.Add(card);
+        
+        // Move this to where is card to hold index information of card
+        //card.transform.parent.gameObject.GetComponent<CardArea>().RemoveCard(card);
+        card.transform.SetParent(slots.transform);
+
+        UpdatePlacementOfSlots();
+        PlaceCardsOnNewSlots();
+
+        Sequence s = DOTween.Sequence();
         s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, 0));
     }
 

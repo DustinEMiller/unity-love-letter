@@ -11,17 +11,18 @@ public class DraggingActions : MonoBehaviour
     }
 
     public void OnEndDrag() {
-        //transform.DOMove(savedPos, 1f); 
-        //transform.DOMove(savedPos, 1f).SetEase(Ease.OutBounce, 0.5f, 0.1f);
-        transform.DOMove(savedPos, 1f).SetEase(Ease.OutQuint);//, 0.5f, 0.1f);
         RaycastHit[] hits;
         hits = Physics.RaycastAll(Camera.main.ScreenPointToRay(Input.mousePosition), 10000f);
 
         foreach (RaycastHit objectHit in hits) {
 
             if(objectHit.collider.gameObject.GetComponent<CardArea>() != null) {
-                Debug.Log("++++++here+++++++++++");
+                if(objectHit.collider.gameObject.GetComponent<CardArea>().GetPlayerId() == playerOwner.PlayerID) {
+                    objectHit.collider.gameObject.GetComponent<CardArea>().ReceiveACard(gameObject);
+                    break;
+                }   
             } else {
+                transform.DOMove(savedPos, 1f).SetEase(Ease.OutQuint);//, 0.5f, 0.1f);
                 //return card to previous position
                 // Set old sorting order 
                 //whereIsCard.SetHandSortingOrder();

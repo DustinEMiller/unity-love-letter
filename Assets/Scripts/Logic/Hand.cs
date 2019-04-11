@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using System.Collections.Generic;
 
 public class Hand : MonoBehaviour {
 
@@ -19,7 +18,7 @@ public class Hand : MonoBehaviour {
         CardsInHand.Insert(0, card);
         card.transform.SetParent(slots.transform);
 
-        // re-calculate the position of the hand
+        //re-calculate the position of the hand
         //PlaceCardsOnNewSlots();
         //UpdatePlacementOfSlots();
     }

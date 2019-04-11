@@ -19,6 +19,8 @@ public class CardManager : MonoBehaviour {
     public Image Background;
 
     public int Id;
+    public int AreaIndex;
+    public int SlotIndex;
 
 
     void Awake() {
@@ -26,7 +28,7 @@ public class CardManager : MonoBehaviour {
             ReadCardFromAsset();
         }
 
-            
+
     }
 
     //TODO: Make use cases
@@ -67,6 +69,10 @@ public class CardManager : MonoBehaviour {
                 CardBack.gameObject.SetActive(true);
             }
         }
+    }
+
+    public void RemoveFromList() {
+        gameObject.transform.parent.GetComponent<CardArea>().RemoveCard(gameObject);
     }
 }
 
