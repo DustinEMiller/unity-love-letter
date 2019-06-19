@@ -9,7 +9,9 @@ public class Player : MonoBehaviour {
 	public GameObject Hand;
     public GameObject Discard;
 
-    public int CurrentTokens;
+    public PlayerName PlayerName;
+
+    private int CurrentTokens;
     public int PlayerID;
     public bool AIPlayer = false;
 
@@ -17,6 +19,8 @@ public class Player : MonoBehaviour {
     public static int IDCounter = 0;
 
     private bool m_Eliminated = false;
+    private CardManager m_ActiveCard;
+
     public bool Eliminated
     {
         get { return m_Eliminated; }
@@ -24,10 +28,17 @@ public class Player : MonoBehaviour {
         {
             if (m_Eliminated == value) return;
             m_Eliminated = value;
-            if (OnEliminatedChange != null && m_Eliminated)
-                OnEliminatedChange(m_Eliminated);
+            if (m_Eliminated) {
+
+            }
         }
     }
+
+    public void WonRound() {
+        CurrentTokens++;
+        TokenVisuals.CurrentTokens = CurrentTokens;
+    }
+
     public delegate void OnEliminatedDelegate(bool eliminated);
     public event OnEliminatedDelegate OnEliminatedChange;
 
@@ -47,5 +58,15 @@ public class Player : MonoBehaviour {
 
     public void OnTurnEnd() {
         GetComponent<TurnMaker>().StopAllCoroutines();
+    }
+
+    public CardManager ActiveCard
+    {
+        get { return m_ActiveCard; }
+        set
+        {
+            if (m_ActiveCard == value) return;
+            m_ActiveCard = value;
+        }
     }
 }

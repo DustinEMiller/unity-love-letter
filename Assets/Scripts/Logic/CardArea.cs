@@ -8,7 +8,7 @@ public class CardArea : MonoBehaviour {
 
     private Player player;
     private Transform DeckTransform;
-    private List<GameObject> CardsInArea = new List<GameObject>();
+    private List<GameObject> CardsInArea;
 
     public SameDistanceChildrens slots;
     public AreaType areaType;
@@ -18,6 +18,7 @@ public class CardArea : MonoBehaviour {
     void Awake () {
         player = this.transform.parent.gameObject.GetComponent<Player>();
         DeckTransform = GameObject.FindObjectOfType<Deck>().transform;
+        ResetArea();
     }
 
     GameObject CreateACardAtPosition(CardAsset cardAsset, Vector3 position, Vector3 eulerAngles) {
@@ -77,11 +78,14 @@ public class CardArea : MonoBehaviour {
         card.transform.SetParent(slots.transform);
 
         CardManager manager = card.GetComponent<CardManager>();
-        manager.SlotParent = slots.transform;
-        manager.SlotIndex = CardsInArea.Count - 1;
+        manager.SlotParent = this;
 
         PlaceCardsOnNewSlots();
         UpdatePlacementOfSlots();
+
+        if (player) {
+            player.ActiveCard = manager;
+        }
 
         Sequence s = DOTween.Sequence();
 
@@ -93,20 +97,28 @@ public class CardArea : MonoBehaviour {
         CardManager manager = card.GetComponent<CardManager>();
         manager.RemoveFromList();
         CardsInArea.Add(card);
-        manager.SlotParent = slots.transform;
-        manager.SlotIndex = CardsInArea.Count - 1;
+        manager.SlotParent = this;
 
         //card.transform.parent.gameObject.GetComponent<CardArea>().RemoveCard(card);
         card.transform.SetParent(slots.transform);
 
         UpdatePlacementOfSlots();
         PlaceCardsOnNewSlots();
+        player.ActiveCard = manager;
 
         Sequence s = DOTween.Sequence();
         s.Append(card.transform.DOLocalMove(slots.Children[0].transform.localPosition, 0));
+        manager.Script.ActivateEffect(player.PlayerID);
+
     }
 
     public int GetPlayerId() {
         return player.PlayerID;
+    }
+
+    public void ResetArea() {
+        CardsInArea = new List<GameObject>();
+        PlaceCardsOnNewSlots();
+        UpdatePlacementOfSlots();
     }
 }

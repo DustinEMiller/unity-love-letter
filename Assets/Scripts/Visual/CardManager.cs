@@ -21,6 +21,7 @@ public class CardManager : MonoBehaviour {
     public int Id;
     public int AreaIndex;
     public int SlotIndex;
+    public CardScript Script;
 
     void Awake() {
         if (cardAsset != null) {
@@ -47,11 +48,12 @@ public class CardManager : MonoBehaviour {
 
     public void ReadCardFromAsset() {
         Name.text = cardAsset.Name;
-        Value.text = cardAsset.Value.ToString();
         Description.text = cardAsset.Description;
         CardGraphic.sprite = cardAsset.CardImage;
         Visible = cardAsset.Visible;
-    }
+        Value.text = cardAsset.Value.ToString();
+        Script = System.Activator.CreateInstance(System.Type.GetType(cardAsset.ScriptName)) as CardScript;
+}
 
     public bool Visible
     {
@@ -70,8 +72,8 @@ public class CardManager : MonoBehaviour {
         }
     }
 
-    private Transform slotParent;
-    public Transform SlotParent
+    private CardArea slotParent;
+    public CardArea SlotParent
     {
         get
         {
@@ -85,7 +87,7 @@ public class CardManager : MonoBehaviour {
     }
 
     public void RemoveFromList() {
-        gameObject.transform.parent.GetComponent<CardArea>().RemoveCard(gameObject);
+        slotParent.RemoveCard(gameObject);
     }
 }
 

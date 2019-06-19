@@ -14,5 +14,6 @@ public class PlayACardCommand : Command {
 
     public override void StartCommandExecution() {
        //deck. 
+       // Execute script attached to cardasset
     }
 }

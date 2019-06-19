@@ -72,34 +72,83 @@ public class GameManager : MonoBehaviour {
         foreach (Player p in Player.Players) {
             p.TokenVisuals.TokensNeededForWin = tokensToWin;
             p.TokenVisuals.CurrentTokens = 0;
-            p.OnEliminatedChange += EliminatePlayerHandler;
-            Settings.Instance.Deck.DrawACard(p.Hand, !p.AIPlayer);
         }
-        Command.CommandExecutionComplete();
 
-        new StartATurnCommand(Player.Players[firstPlayer]).AddToQueue();
+        StartRound();
 
     }
+
+    private void StartRound() {
+        foreach (Player p in Player.Players) {
+            Settings.Instance.Deck.DrawACard(p.Hand, !p.AIPlayer);
+        }
+
+        Command.CommandExecutionComplete();
+        new StartATurnCommand(Player.Players[firstPlayer]).AddToQueue();
+    }
+
 
     public void EndTurn() {
         // send all commands in the end of current player`s turn
         whoseTurn.OnTurnEnd();
 
-        //get next player in list
-        new StartATurnCommand(NextPlayer()).AddToQueue();
-    }
+        List<Player> AlivePlayers = new List<Player>();
 
-    public Player NextPlayer() {
-        if(whoseTurn.PlayerID >= Player.Players.Length -1) {
-            return Player.Players[0];
+        foreach (Player p in Player.Players) {
+            if(!p.Eliminated) {
+                AlivePlayers.Add(p);
+            }
+        }
+
+        if (AlivePlayers.Count > 1) {
+            //get next player in list
+            new StartATurnCommand(NextPlayer()).AddToQueue();
         } else {
-            return Player.Players[whoseTurn.PlayerID++];
+            AlivePlayers[0].WonRound();
+            NewRound();
         }
     }
 
+    public Player NextPlayer() {
+
+        if(whoseTurn.PlayerID >= Player.Players.Length -1 && !Player.Players[0].Eliminated) {
+            return Player.Players[0];
+        } else {
+            for (int i = whoseTurn.PlayerID + 1; i < Player.Players.Length - 1; i++) {
+                if(!Player.Players[i].Eliminated) {
+                    return Player.Players[i];
+                }
+            }
+        }
+
+        return Player.Players[0];
+    }
+
+    private void NewRound() {
+        CardManager[] allCards = UnityEngine.Object.FindObjectsOfType<CardManager>();
+
+        foreach (CardManager c in allCards) {
+            Destroy(c.gameObject);
+        }
+        Settings.Instance.Deck.ResetDeck();
+        foreach (Player p in Player.Players) {
+            CardArea hand = p.Hand.GetComponent<CardArea>();
+            hand.ResetArea();
+            CardArea discard = p.Discard.GetComponent<CardArea>();
+            discard.ResetArea();
+        }
+
+        StartRound();
+        // also need to remove event listeners from player buttons
+        // easiest way may be to add script in button with a 
+        // reference to the listener added and then remove instance of reference
+        // UnityAction action
+        // 
+
+    }
 
     private void EliminatePlayerHandler(bool newVal) {
-        //do whatever
+        //is this even needed? what to do with it?
     }
 
 }

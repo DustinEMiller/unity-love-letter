@@ -11,6 +11,7 @@ public class EliminatePlayerCommand : Command {
     }
 
     public override void StartCommandExecution() {
-        Player.Players[this.PlayerID].Eliminated = true;  
+        Player.Players[this.PlayerID].Eliminated = true;
+        CommandExecutionComplete();
     }
 }

@@ -7,15 +7,30 @@ public class Deck : MonoBehaviour {
     public CardAsset[] cardAssets;
     public GameObject faceDownDiscard;
     public GameObject twoPlayerDiscard;
-    public List<CardAsset> cards = new List<CardAsset>();
     [SerializeField]
-  
     private CardCollection cardCollection = new CardCollection();
+    [SerializeField]
+    private List<CardAsset> cards;
+
 
     void Awake() {
 
         cardCollection = GameObject.FindObjectOfType<CardCollection>();
+        ResetDeck();
+    }
 
+    public void DrawACard(GameObject area, bool show) {
+
+        if (cards.Count > 0) {
+            new DrawACardCommand(cards[0], area, show).AddToQueue();
+            cards.RemoveAt(0);
+        } else {
+            //No Cards, what happens?
+        }
+    }
+
+    public void ResetDeck() {
+        cards = new List<CardAsset>();
         IDFactory.ResetIDs();
 
         foreach (var ca in cardCollection.cards) {
@@ -27,15 +42,5 @@ public class Deck : MonoBehaviour {
         }
 
         cards.Shuffle();
-    }
-
-    public void DrawACard(GameObject area, bool show) {
-
-        if (cards.Count > 0) {
-            new DrawACardCommand(cards[0], area, show).AddToQueue();
-            cards.RemoveAt(0);
-        } else {
-            //No Cards, what happens?
-        }
     }
 }
